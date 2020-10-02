@@ -1,31 +1,25 @@
 #!/usr/bin/env python
 """A Python Raytracer by Param Joshi, 2020"""
+import argparse
+import importlib
+import os
 
-from image import Image
-from color import Color
-from Vector import Vector
-from point import Point
-from sphere import Sphere
-from engine import RenderEngine
 from scene import Scene
+from engine import RenderEngine
 
 def main():
-    WIDTH = 320
-    HEIGHT = 200
-    
-    camera = Vector(0,0,-1)
-    objects = [
-        Sphere(Point(0, -0.25, 0), 0.1, Color.from_hex("#cc0000")),
-        Sphere(Point(0, 0, 0), 0.1, Color.from_hex("#edd400")),
-        Sphere(Point(0, +0.25, 0), 0.1, Color.from_hex("#4e9a06")),
-    ]
-    scene = Scene(camera, objects, WIDTH, HEIGHT)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("scene",help="Path to Scene File(without .py extention")
+    args = parser.parse_args()
+    mod = importlib.import_module(args.scene)
+
+    scene = Scene(mod.CAMERA,mod.OBJECTS,mod.LIGHTS,mod.WIDTH,mod.HEIGHT)
     engine = RenderEngine()
     image = engine.render(scene)
+    os.chdir(os.path.dirname(os.path.abspath(mod.__file__)))
 
-    with open("test.ppm", "w") as img_file:
+    with open(mod.RENDERED_IMG, "w") as img_file:
         image.write_ppm(img_file)
-
 
 if __name__ == "__main__":
     main()

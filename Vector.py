@@ -18,8 +18,8 @@ class Vector:
     def normalize(self):
         return self/self.magnitude()
     
-    def __add__(self,other):
-        return Vector(self.x + other.x,self.y + other.y,self.z + other.z)
+    def __add__(self, other):
+        return Vector(self.x + other.x, self.y + other.y, self.z + other.z)
     
     def __sub__(self,other):
         return Vector(self.x - other.x,self.y - other.y,self.z - other.z)
